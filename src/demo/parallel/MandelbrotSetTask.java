@@ -70,7 +70,7 @@ class MandelbrotSetTask extends Task<Long> {
     private static final double LENGTH_BOUNDARY = 6d;
 
     /**
-     * For antialiasing we break each pixel into 3x3 grid and interpolate 
+     * For we break each pixel into 3x3 grid and interpolate
      * between values calculated on those grid positions
      */
     private static final int ANTIALIASING_BASE = 3;
@@ -346,33 +346,33 @@ class MandelbrotSetTask extends Task<Long> {
     static final Color[] colors = new Color[256];
 
     static {
-        
         /**
          * Color stops for colors table: color values
          */
         Color[] cc = {
-            Color.rgb(40, 0, 0),
-            Color.RED,
-            Color.WHITE,
-            Color.RED,
-            Color.rgb(100, 0, 0),
-            Color.RED,
-            Color.rgb(50, 0, 0)
+                Color.rgb(148, 0, 211),     // Фиолетовый
+                Color.BLUE,                 // Синий
+                Color.GREEN,                // Зеленый
+                Color.YELLOW,               // Желтый
+                Color.ORANGE,               // Оранжевый
+                Color.RED,                  // Красный
+                Color.rgb(40, 0, 0)         // Темно-красный
         };
-        
+
         /**
          * Color stops for colors table: relative position in the table
          */
         double[] cp = {
-            0, 0.17, 0.25, 0.30, 0.5, 0.75, 1,};
-        
+                0, 0.16, 0.33, 0.5, 0.66, 0.83, 1,
+        };
+
         /**
          * Color table population
          */
         int j = 0;
         for (int i = 0; i < colors.length; i++) {
             double p = (double) i / (colors.length - 1);
-            if (p > cp[j + 1]) {
+            if (j + 1 < cp.length && p > cp[j + 1]) {
                 j++;
             }
             double val = (p - cp[j]) / (cp[j + 1] - cp[j]);
