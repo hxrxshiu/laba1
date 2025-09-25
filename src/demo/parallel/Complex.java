@@ -30,7 +30,6 @@
  */
 package demo.parallel;
 
-
 /**
  * A complex number is a number that can be expressed in the form a + b * i, where
  * a and b are real numbers and i is the imaginary unit, which satisfies the
@@ -45,15 +44,15 @@ package demo.parallel;
  * @author Alexander Kouznetsov, Tristan Yan
  */
 public class Complex {
-    
+
     private double re;   // the real part
     private double im;   // the imaginary part
 
-    /** 
+    /**
      * create a new object with the given real and imaginary parts
-     * 
+     *
      * @param real a complex number real part
-     * @param imag a complex number imaginary part 
+     * @param imag a complex number imaginary part
      */
     public Complex(double real, double imag) {
         re = real;
@@ -72,6 +71,17 @@ public class Complex {
     }
 
     /**
+     * Subtract operation.
+     * @param b subtrahend
+     * @return this Complex object whose value is (this - b)
+     */
+    public Complex minus(Complex b) {
+        re -= b.re;
+        im -= b.im;
+        return this;
+    }
+
+    /**
      * Multiply operation.
      * @param  b multiplier
      * @return this Complex object whose value is this * b
@@ -86,11 +96,143 @@ public class Complex {
     }
 
     /**
-     * Square of Complex object's length, we're using square of length to 
+     * Division operation.
+     * @param b divisor
+     * @return this Complex object whose value is this / b
+     */
+    public Complex dividedBy(Complex b) {
+        double denominator = b.re * b.re + b.im * b.im;
+        double real = (re * b.re + im * b.im) / denominator;
+        double imag = (im * b.re - re * b.im) / denominator;
+        re = real;
+        im = imag;
+        return this;
+    }
+
+    /**
+     * Power operation (this^n).
+     * @param n exponent
+     * @return this Complex object whose value is this^n
+     */
+    public Complex power(int n) {
+        if (n == 0) {
+            re = 1;
+            im = 0;
+            return this;
+        }
+
+        Complex result = new Complex(1, 0);
+        Complex temp = new Complex(re, im);
+        
+        if (n < 0) {
+            temp = temp.power(-n);
+            return this.dividedBy(temp);
+        }
+
+        while (n > 0) {
+            if (n % 2 == 1) {
+                result = result.times(temp);
+            }
+            temp = temp.times(temp);
+            n /= 2;
+        }
+
+        re = result.re;
+        im = result.im;
+        return this;
+    }
+
+    /**
+     * Exponential function (e^z).
+     * @return this Complex object whose value is e^(this)
+     */
+    public Complex exp() {
+        double expRe = Math.exp(re);
+        re = expRe * Math.cos(im);
+        im = expRe * Math.sin(im);
+        return this;
+    }
+
+    /**
+     * Natural logarithm (ln(z)).
+     * @return this Complex object whose value is ln(this)
+     */
+    public Complex log() {
+        double magnitude = Math.sqrt(re * re + im * im);
+        double angle = Math.atan2(im, re);
+        re = Math.log(magnitude);
+        im = angle;
+        return this;
+    }
+
+    /**
+     * Sine function (sin(z)).
+     * @return this Complex object whose value is sin(this)
+     */
+    public Complex sin() {
+        double real = Math.sin(re) * Math.cosh(im);
+        double imag = Math.cos(re) * Math.sinh(im);
+        re = real;
+        im = imag;
+        return this;
+    }
+
+    /**
+     * Cosine function (cos(z)).
+     * @return this Complex object whose value is cos(this)
+     */
+    public Complex cos() {
+        double real = Math.cos(re) * Math.cosh(im);
+        double imag = -Math.sin(re) * Math.sinh(im);
+        re = real;
+        im = imag;
+        return this;
+    }
+
+    /**
+     * Conjugate operation.
+     * @return this Complex object whose value is conjugate of this
+     */
+    public Complex conjugate() {
+        im = -im;
+        return this;
+    }
+
+    /**
+     * Absolute value (magnitude).
+     * @return magnitude of the complex number
+     */
+    public double abs() {
+        return Math.sqrt(re * re + im * im);
+    }
+
+    /**
+     * Square of Complex object's length, we're using square of length to
      * eliminate the computation of square root
      * @return square of length
-    */
+     */
     public double lengthSQ() {
         return re * re + im * im;
+    }
+
+    /**
+     * Get real part.
+     * @return real part
+     */
+    public double getRe() {
+        return re;
+    }
+
+    /**
+     * Get imaginary part.
+     * @return imaginary part
+     */
+    public double getIm() {
+        return im;
+    }
+
+    @Override
+    public String toString() {
+        return re + " + " + im + "i";
     }
 }

@@ -274,10 +274,50 @@ class MandelbrotSetTask extends Task<Long> {
     private int calc(Complex comp) {
         int count = 0;
         Complex c = new Complex(0, 0);
+
+
+        int fractalType = 3;
+
         do {
-            c = c.times(c).times(c).plus(comp); // z³ + c
+            switch (fractalType) {
+                case 0:
+                    c = c.times(c).plus(comp);
+                    break;
+
+                case 1:
+                    c = c.times(c).times(c).plus(comp);
+                    break;
+
+                case 2:
+                    c = c.exp().plus(comp);
+                    break;
+
+                case 3:
+                    c = c.sin().plus(comp);
+                    break;
+
+                case 4:
+                    c = c.cos().plus(comp);
+                    break;
+
+                case 5:
+                    Complex temp = new Complex(c.getRe(), c.getIm());
+                    c = temp.times(temp).plus(new Complex(1, 0)).log().plus(comp);
+                    break;
+
+                case 6:
+                    Complex z2 = new Complex(c.getRe(), c.getIm()).times(c);
+                    Complex sinZ = new Complex(c.getRe(), c.getIm()).sin();
+                    c = z2.plus(sinZ).plus(comp);
+                    break;
+
+                default:
+                    c = c.times(c).plus(comp);
+                    break;
+            }
             count++;
         } while (count < CAL_MAX_COUNT && c.lengthSQ() < LENGTH_BOUNDARY);
+
         return count;
     }
 
